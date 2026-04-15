@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revy AI — Medical Approvals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg: #080c14;
+            --surface: #0f1724;
+            --card: #141e30;
+            --card2: #182236;
+            --border: #1e2d45;
+            --border2: #253450;
+            --teal: #00d4b4;
+            --teal-glow: #00d4b420;
+            --blue: #4f8ef7;
+            --amber: #f5a623;
+            --red: #f05555;
+            --green: #2ecc8f;
+            --purple: #9b7cf4;
+            --text: #dce8f5;
+            --muted: #5a7499;
+            --muted2: #3d5473;
+            --mono: 'JetBrains Mono', monospace;
+            --radius: 14px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background-image: radial-gradient(ellipse 70% 50% at 15% 0%, #00d4b40d 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 85% 100%, #4f8ef70d 0%, transparent 60%);
+        }
+        /* NAV */
+        
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 36px;
+            border-bottom: 1px solid var(--border);
+            background: #080c14cc;
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 500;
+            color: #000;
+            letter-spacing: -1px;
+        }
+        
+        .logo-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+        }
+        
+        .logo-text span {
+            color: var(--teal);
+        }
+        
+        .nav-tag {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: .4px;
+        }
+        
+        .online-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: var(--teal);
+            background: var(--teal-glow);
+            border: 1px solid #00d4b430;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+        
+        .dot-pulse {
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            animation: dpulse 2s infinite;
+        }
+        
+        @keyframes dpulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+            50% {
+                opacity: .4;
+                transform: scale(1.5)
+            }
+        }
+        /* LAYOUT */
+        
+        .layout {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 32px 28px;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        
+        @media(max-width:920px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* CARD */
+        
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        
+        .card+.card {
+            margin-top: 20px;
+        }
+        
+        .sec-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .sec-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        /* FORM CONTROLS */
+        
+        .field {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin-bottom: 7px;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px var(--teal-glow);
+        }
+        
+        input::placeholder {
+            color: var(--muted2);
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7499' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+            cursor: pointer;
+        }
+        
+        select option {
+            background: var(--surface);
+        }
+        
+        .price-wrap {
+            position: relative;
+        }
+        
+        .price-pre {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--muted);
+            pointer-events: none;
+        }
+        
+        .price-wrap input {
+            padding-left: 36px;
+            font-family: var(--mono);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--teal) 0%, #00b89e 100%);
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: .3px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'DM Sans', sans-serif;
+            transition: opacity .2s, transform .1s;
+        }
+        
+        .btn:hover {
+            opacity: .88;
+        }
+        
+        .btn:active {
+            transform: scale(.98);
+        }
+        
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+        
+        .err {
+            margin-top: 14px;
+            padding: 11px 14px;
+            background: #f0555515;
+            border: 1px solid #f0555530;
+            border-radius: 9px;
+            font-size: 13px;
+            color: #f9a0a0;
+            display: none;
+        }
+        
+        .spinner {
+            width: 15px;
+            height: 15px;
+            border: 2px solid #00000040;
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin .65s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        /* PATIENT CARD PREVIEW */
+        
+        .patient-preview {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 16px;
+            margin-top: 14px;
+            display: none;
+        }
+        
+        .pp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .pp-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+        }
+        
+        .pp-class {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid var(--border2);
+            color: var(--teal);
+        }
+        
+        .pp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .pp-item .pk {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+        
+        .pp-item .pv {
+            font-size: 13px;
+            color: var(--text);
+            margin-top: 2px;
+        }
+        
+        .pp-conditions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .pp-tag {
+            display: inline-block;
+            font-size: 11px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 2px 8px;
+            margin: 2px 3px 2px 0;
+            color: var(--text);
+        }
+        /* LIMIT TRACKER */
+        
+        .limit-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 18px;
+        }
+        
+        .lb-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 12px;
+        }
+        
+        .lb-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+        
+        .lb-pid {
+            font-size: 11px;
+            color: var(--muted2);
+            margin-top: 3px;
+            font-family: var(--mono);
+        }
+        
+        .lb-remaining {
+            font-family: var(--mono);
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--teal);
+            line-height: 1;
+        }
+        
+        .lb-total {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            text-align: right;
+        }
+        
+        .bar-track {
+            height: 5px;
+            background: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width .7s cubic-bezier(.4, 0, .2, 1);
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+        }
+        
+        .bar-fill.warn {
+            background: linear-gradient(90deg, var(--amber), #f97316);
+        }
+        
+        .bar-fill.danger {
+            background: linear-gradient(90deg, var(--red), #dc2626);
+        }
+        
+        .bar-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 7px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+        
+        .claims-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        
+        .claim-row {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cr-left .cs {
+            font-size: 13px;
+            color: var(--text);
+        }
+        
+        .cr-left .cm {
+            font-size: 11px;
+            color: var(--muted);
+            font-family: var(--mono);
+            margin-top: 2px;
+        }
+        
+        .cr-amt {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--amber);
+        }
+        
+        .reset-btn {
+            margin-top: 12px;
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            cursor: pointer;
+            transition: color .2s, border-color .2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .reset-btn:hover {
+            color: var(--red);
+            border-color: var(--red);
+        }
+        /* RIGHT PANEL */
+        
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /* STATUS BADGE */
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .s-approved {
+            background: #2ecc8f15;
+            color: #86efbd;
+            border: 1px solid #2ecc8f30;
+        }
+        
+        .s-approved .status-dot {
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+        
+        .s-denied {
+            background: #f0555515;
+            color: #fca5a5;
+            border: 1px solid #f0555530;
+        }
+        
+        .s-denied .status-dot {
+            background: var(--red);
+            box-shadow: 0 0 6px var(--red);
+        }
+        
+        .s-preauth {
+            background: #f5a62315;
+            color: #fcd34d;
+            border: 1px solid #f5a62330;
+        }
+        
+        .s-preauth .status-dot {
+            background: var(--amber);
+            box-shadow: 0 0 6px var(--amber);
+        }
+        
+        .s-error {
+            background: #9b7cf415;
+            color: #c4b5fd;
+            border: 1px solid #9b7cf430;
+        }
+        
+        .s-error .status-dot {
+            background: var(--purple);
+        }
+        /* DECISION */
+        
+        .dec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .reason-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .reason-box:last-child {
+            margin-bottom: 0;
+        }
+        
+        .reason-key {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 9px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .rk-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 2px;
+        }
+        
+        .reason-text {
+            font-size: 13px;
+            line-height: 1.75;
+            color: #8eaac8;
+        }
+        /* TABS */
+        
+        .tabs {
+            display: flex;
+            gap: 3px;
+            background: var(--surface);
+            border-radius: 9px;
+            padding: 3px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 7px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .2s;
+            text-align: center;
+        }
+        
+        .tab-btn.active {
+            background: var(--card2);
+            color: var(--text);
+            box-shadow: 0 1px 6px #0009;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        /* PROFILE TAB */
+        
+        .prof-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        
+        .prof-item .pk {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        
+        .prof-item .pv {
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .prof-item .pv.mono {
+            font-family: var(--mono);
+            color: var(--teal);
+        }
+        
+        .prof-item.full {
+            grid-column: span 2;
+        }
+        
+        .hist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        
+        .hist-row {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 12px 14px;
+        }
+        
+        .hist-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .hist-cond {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .hist-status {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-family: var(--mono);
+        }
+        
+        .st-managed {
+            background: #2ecc8f15;
+            color: #86efbd;
+            border: 1px solid #2ecc8f25;
+        }
+        
+        .st-chronic {
+            background: #f5a62315;
+            color: #fcd34d;
+            border: 1px solid #f5a62325;
+        }
+        
+        .st-active {
+            background: #f0555515;
+            color: #fca5a5;
+            border: 1px solid #f0555525;
+        }
+        
+        .st-resolved {
+            background: #4f8ef715;
+            color: #93c5fd;
+            border: 1px solid #4f8ef725;
+        }
+        
+        .st-controlled {
+            background: #9b7cf415;
+            color: #c4b5fd;
+            border: 1px solid #9b7cf425;
+        }
+        
+        .st-monitored {
+            background: #5a749915;
+            color: #94a3b8;
+            border: 1px solid #5a749925;
+        }
+        
+        .st-seasonal {
+            background: #5a749915;
+            color: #94a3b8;
+            border: 1px solid #5a749925;
+        }
+        
+        .st-treated {
+            background: #2ecc8f15;
+            color: #86efbd;
+            border: 1px solid #2ecc8f25;
+        }
+        
+        .hist-since {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-family: var(--mono);
+        }
+        
+        .hist-notes {
+            font-size: 12px;
+            color: #6b8aaa;
+            line-height: 1.5;
+        }
+        
+        .allergy-tag {
+            display: inline-block;
+            font-size: 11px;
+            background: #f0555510;
+            border: 1px solid #f0555525;
+            color: #fca5a5;
+            border-radius: 5px;
+            padding: 2px 9px;
+            margin: 2px 3px 2px 0;
+        }
+        /* POLICY TAB */
+        
+        .pol-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        @media(max-width:600px) {
+            .pol-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .pol-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .pol-key {
+            font-size: 12px;
+            color: var(--muted);
+            flex: 1;
+            line-height: 1.4;
+        }
+        
+        .pol-val {
+            font-size: 11px;
+            font-family: var(--mono);
+            text-align: right;
+            white-space: nowrap;
+        }
+        
+        .pol-val.v-covered {
+            color: var(--green);
+        }
+        
+        .pol-val.v-no {
+            color: var(--red);
+        }
+        
+        .pol-val.v-limit {
+            color: var(--teal);
+        }
+        /* PRE-AUTH TAB */
+        
+        .pa-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .pa-yes {
+            background: #f5a62315;
+            color: #fcd34d;
+            border: 1px solid #f5a62330;
+        }
+        
+        .pa-no {
+            background: #2ecc8f15;
+            color: #86efbd;
+            border: 1px solid #2ecc8f30;
+        }
+        /* POLICY CARD (company info top) */
+        
+        .pol-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .ph-company {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .ph-policy {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+        
+        .ph-badge {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            background: var(--teal-glow);
+            color: var(--teal);
+            border: 1px solid #00d4b430;
+            white-space: nowrap;
+        }
+        /* SERVICE COVERAGE HIGHLIGHT */
+        
+        .svc-highlight {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+        
+        .svc-hl-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .svc-hl-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .svc-hl-limit {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--teal);
+        }
+        
+        .svc-hl-notes {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        /* TOAST */
+        
+        #toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--card2);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: var(--text);
+            box-shadow: 0 8px 40px #000c;
+            transform: translateY(70px);
+            opacity: 0;
+            transition: all .35s cubic-bezier(.4, 0, .2, 1);
+            z-index: 999;
+            max-width: 300px;
+        }
+        
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--teal);
+            margin-bottom: 5px;
+        }
+        
+        .hidden {
+            display: none!important;
+        }
+        
+        .no-claims {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            padding: 12px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-logo">
+            <div class="logo-mark">Rx</div>
+            <div class="logo-text">Revy<span>AI</span></div>
+            <div class="nav-tag">Medical Approvals</div>
+        </div>
+        <div class="online-pill"><span class="dot-pulse"></span>System Online</div>
+    </nav>
+
+    <div class="layout">
+
+        <!-- ── LEFT COLUMN ── -->
+        <div>
+            <div class="card">
+                <div class="sec-label">New Approval Request</div>
+
+                <div class="field">
+                    <label>Select Patient</label>
+                    <select id="sel-patient" onchange="onPatientChange()">
+          <option value="">Loading patients...</option>
+        </select>
+                </div>
+
+                <!-- Patient quick-preview -->
+                <div class="patient-preview" id="patient-preview">
+                    <div class="pp-row">
+                        <div class="pp-name" id="pp-name"></div>
+                        <div class="pp-class" id="pp-class"></div>
+                    </div>
+                    <div class="pp-grid">
+                        <div class="pp-item">
+                            <div class="pk">Insurance</div>
+                            <div class="pv" id="pp-ins"></div>
+                        </div>
+                        <div class="pp-item">
+                            <div class="pk">Policy</div>
+                            <div class="pv" id="pp-pol"></div>
+                        </div>
+                    </div>
+                    <div class="pp-conditions">
+                        <div class="pk" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;">Chronic Conditions</div>
+                        <div id="pp-conditions"></div>
+                    </div>
+                </div>
+
+                <div class="field" style="margin-top:16px;">
+                    <label>Requested Service</label>
+                    <select id="sel-service">
+          <option value="">Loading services...</option>
+        </select>
+                </div>
+
+                <div class="field">
+                    <label>Service Price (SR)</label>
+                    <div class="price-wrap">
+                        <span class="price-pre">SR</span>
+                        <input type="number" id="inp-price" placeholder="0.00" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <button class="btn" id="btn-submit" onclick="submitRequest()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Analyze &amp; Approve
+      </button>
+
+                <div class="err" id="err-box"></div>
+            </div>
+
+            <!-- Limit Tracker -->
+            <div class="card hidden" id="limit-card">
+                <div class="sec-label">Annual Limit Tracker</div>
+                <div class="limit-box">
+                    <div class="lb-top">
+                        <div>
+                            <div class="lb-label">Remaining This Year</div>
+                            <div class="lb-pid" id="lb-pid"></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="lb-remaining" id="lb-remaining">—</div>
+                            <div class="lb-total" id="lb-total"></div>
+                        </div>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill" id="bar-fill" style="width:100%"></div>
+                    </div>
+                    <div class="bar-meta">
+                        <span id="lb-used">SR 0 used</span>
+                        <span id="lb-pct">100% remaining</span>
+                    </div>
+                </div>
+                <div class="claims-list" id="claims-list"></div>
+                <button class="reset-btn" onclick="resetLimit()">Reset Annual Limit for This Patient</button>
+            </div>
+        </div>
+
+        <!-- ── RIGHT COLUMN ── -->
+        <div class="right-col hidden" id="results-panel">
+
+            <!-- Decision Card -->
+            <div class="card">
+                <div class="dec-header">
+                    <div class="sec-label" style="margin:0;flex:1;">AI Decision Engine</div>
+                    <div id="status-badge" class="status-badge s-error" style="margin-left:16px;">
+                        <span class="status-dot"></span>
+                        <span id="status-text">—</span>
+                    </div>
+                </div>
+
+                <!-- Service coverage highlight -->
+                <div class="svc-highlight" id="svc-highlight">
+                    <div class="svc-hl-top">
+                        <div class="svc-hl-name" id="svc-hl-name"></div>
+                        <div class="svc-hl-limit" id="svc-hl-limit"></div>
+                    </div>
+                    <div class="svc-hl-notes" id="svc-hl-notes"></div>
+                </div>
+
+                <div class="reason-box">
+                    <div class="reason-key"><span class="rk-dot" style="background:var(--blue);"></span>Hospital / Clinical Notes</div>
+                    <div class="reason-text" id="res-hosp"></div>
+                </div>
+                <div class="reason-box" style="border-color:var(--teal-glow);">
+                    <div class="reason-key" style="color:var(--teal);"><span class="rk-dot" style="background:var(--teal);"></span>Patient Explanation</div>
+                    <div class="reason-text" id="res-pat"></div>
+                </div>
+            </div>
+
+            <!-- Detail Tabs -->
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('profile')">Patient Profile</button>
+                    <button class="tab-btn" onclick="switchTab('policy')">Policy Details</button>
+                    <button class="tab-btn" onclick="switchTab('preauth')">Pre-Auth Rules</button>
+                </div>
+
+                <!-- Profile -->
+                <div class="tab-pane active" id="pane-profile">
+                    <div class="prof-grid" style="margin-bottom:20px;">
+                        <div class="prof-item">
+                            <div class="pk">Full Name</div>
+                            <div class="pv" id="r-name"></div>
+                        </div>
+                        <div class="prof-item">
+                            <div class="pk">Date of Birth</div>
+                            <div class="pv" id="r-dob"></div>
+                        </div>
+                        <div class="prof-item">
+                            <div class="pk">Gender</div>
+                            <div class="pv" id="r-gender"></div>
+                        </div>
+                        <div class="prof-item">
+                            <div class="pk">Member Class</div>
+                            <div class="pv mono" id="r-class"></div>
+                        </div>
+                        <div class="prof-item">
+                            <div class="pk">Annual Limit</div>
+                            <div class="pv mono" id="r-limits"></div>
+                        </div>
+                        <div class="prof-item">
+                            <div class="pk">Coverage</div>
+                            <div class="pv" id="r-coverage"></div>
+                        </div>
+                        <div class="prof-item full">
+                            <div class="pk">Allergies</div>
+                            <div class="pv" id="r-allergies" style="margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="sec-label">Medical History</div>
+                    <div class="hist-list" id="hist-list"></div>
+                </div>
+
+                <!-- Policy -->
+                <div class="tab-pane" id="pane-policy">
+                    <div class="pol-header">
+                        <div>
+                            <div class="ph-company" id="pol-company"></div>
+                            <div class="ph-policy" id="pol-number"></div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:4px;" id="pol-holder"></div>
+                            <div style="font-size:11px;color:var(--muted2);font-family:var(--mono);margin-top:2px;" id="pol-dates"></div>
+                        </div>
+                        <div class="ph-badge" id="pol-network"></div>
+                    </div>
+                    <div class="pol-grid" id="pol-grid"></div>
+                </div>
+
+                <!-- Pre-Auth -->
+                <div class="tab-pane" id="pane-preauth">
+                    <div id="pa-badge-wrap" style="margin-bottom:16px;"></div>
+                    <div class="reason-box">
+                        <div class="reason-key"><span class="rk-dot" style="background:var(--amber);"></span>Pre-Authorization Policy</div>
+                        <div class="reason-text" id="pa-notes"></div>
+                    </div>
+                    <div class="reason-box" style="margin-top:12px;border-color:#f5a62325;">
+                        <div class="reason-key" style="color:var(--amber);"><span class="rk-dot" style="background:var(--amber);"></span>Special Instructions</div>
+                        <div class="reason-text" id="pa-special"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">
+        <div class="toast-title" id="toast-title"></div>
+        <div id="toast-msg"></div>
+    </div>
+
+    <script>
+        // ─── STATE ───────────────────────────────────
+        var allPatients = [];
+        var allServices = [];
+        var currentPid = null;
+        var currentData = null;
+
+        // ─── INIT ─────────────────────────────────────
+        window.addEventListener('DOMContentLoaded', function() {
+            loadPatients();
+            loadServices();
+        });
+
+        function loadPatients() {
+            fetch('/api/patients').then(function(r) {
+                return r.json();
+            }).then(function(list) {
+                allPatients = list;
+                var sel = document.getElementById('sel-patient');
+                sel.innerHTML = '<option value="">— Select a patient —</option>';
+                list.forEach(function(p) {
+                    var opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.textContent = p.id + ' · ' + p.name + ' (' + p.class + ')';
+                    sel.appendChild(opt);
+                });
+            }).catch(function() {
+                document.getElementById('sel-patient').innerHTML = '<option value="">Error loading patients</option>';
+            });
+        }
+
+        function loadServices() {
+            fetch('/api/services').then(function(r) {
+                return r.json();
+            }).then(function(list) {
+                allServices = list;
+                var sel = document.getElementById('sel-service');
+                sel.innerHTML = '<option value="">— Select a service —</option>';
+                list.forEach(function(s) {
+                    var opt = document.createElement('option');
+                    opt.value = s;
+                    opt.textContent = s;
+                    sel.appendChild(opt);
+                });
+            }).catch(function() {
+                document.getElementById('sel-service').innerHTML = '<option value="">Error loading services</option>';
+            });
+        }
+
+        // ─── PATIENT CHANGE ────────────────────────────
+        function onPatientChange() {
+            var pid = document.getElementById('sel-patient').value;
+            var preview = document.getElementById('patient-preview');
+            if (!pid) {
+                preview.style.display = 'none';
+                return;
+            }
+
+            var p = allPatients.find(function(x) {
+                return x.id === pid;
+            });
+            if (!p) {
+                preview.style.display = 'none';
+                return;
+            }
+
+            document.getElementById('pp-name').textContent = p.name;
+            document.getElementById('pp-class').textContent = p.class;
+            document.getElementById('pp-ins').textContent = p.insurance;
+            document.getElementById('pp-pol').textContent = p.policy_number;
+
+            // Show limit tracker if we have stored state
+            currentPid = pid;
+            var state = getLimitState(pid, null);
+            if (state) {
+                renderLimitCard(pid, state);
+            } else {
+                document.getElementById('limit-card').classList.add('hidden');
+            }
+
+            // Fetch full patient to show conditions (done after approval usually, show placeholder here)
+            document.getElementById('pp-conditions').innerHTML = '<span style="color:var(--muted);font-size:12px;">Will load on approval</span>';
+            preview.style.display = 'block';
+        }
+
+        // ─── SUBMIT ───────────────────────────────────
+        function submitRequest() {
+            var pid = document.getElementById('sel-patient').value;
+            var service = document.getElementById('sel-service').value;
+            var price = parseFloat(document.getElementById('inp-price').value) || 0;
+            var btn = document.getElementById('btn-submit');
+            var errBox = document.getElementById('err-box');
+
+            if (!pid) {
+                showErr('Please select a patient.');
+                return;
+            }
+            if (!service) {
+                showErr('Please select a service.');
+                return;
+            }
+
+            errBox.style.display = 'none';
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Analyzing...';
+
+            fetch('/api/approve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        patient_id: pid,
+                        service: service,
+                        service_price: price
+                    })
+                })
+                .then(function(r) {
+                    return r.json().then(function(d) {
+                        return {
+                            ok: r.ok,
+                            data: d
+                        };
+                    });
+                })
+                .then(function(res) {
+                    if (!res.ok) throw new Error(res.data.error || 'API error');
+                    renderAll(res.data, pid, service, price);
+                })
+                .catch(function(e) {
+                    showErr(e.message);
+                })
+                .finally(function() {
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Analyze &amp; Approve';
+                });
+        }
+
+        // ─── RENDER ALL ────────────────────────────────
+        function renderAll(data, pid, service, price) {
+            var p = data.patient_data;
+            var d = data.decision;
+            currentData = data;
+            currentPid = pid;
+
+            // Status badge
+            var badge = document.getElementById('status-badge');
+            var st = d.status;
+            badge.className = 'status-badge';
+            if (st === 'Approved') badge.classList.add('s-approved');
+            else if (st === 'Not Approved' || st === 'Denied') badge.classList.add('s-denied');
+            else if (st === 'Pre-Auth Required') badge.classList.add('s-preauth');
+            else badge.classList.add('s-error');
+            badge.innerHTML = '<span class="status-dot"></span><span>' + st + '</span>';
+
+            // Service highlight
+            var covSvcs = p.covered_services || {};
+            var svcInfo = covSvcs[service];
+            document.getElementById('svc-hl-name').textContent = service;
+            if (svcInfo) {
+                document.getElementById('svc-hl-limit').textContent = svcInfo.limit || '—';
+                document.getElementById('svc-hl-notes').textContent = svcInfo.notes || (svcInfo.covered ? 'Covered under policy' : 'Not covered under this class');
+                document.getElementById('svc-highlight').style.borderColor = svcInfo.covered ? 'rgba(46,204,143,.25)' : 'rgba(240,85,85,.25)';
+            } else {
+                document.getElementById('svc-hl-limit').textContent = 'Not Listed';
+                document.getElementById('svc-hl-notes').textContent = 'Service not found in policy schedule.';
+            }
+
+            // Reasoning
+            document.getElementById('res-hosp').textContent = d.hospital_reason;
+            document.getElementById('res-pat').textContent = d.patient_reason;
+
+            // Profile tab
+            document.getElementById('r-name').textContent = p.name;
+            document.getElementById('r-dob').textContent = p.dob;
+            document.getElementById('r-gender').textContent = p.gender;
+            document.getElementById('r-class').textContent = p.class;
+            document.getElementById('r-limits').textContent = 'SR ' + (p.limits || 0).toLocaleString();
+            document.getElementById('r-coverage').textContent = p.coverage;
+
+            var allergies = p.allergies || [];
+            document.getElementById('r-allergies').innerHTML = allergies.length ?
+                allergies.map(function(a) {
+                    return '<span class="allergy-tag">' + a + '</span>';
+                }).join('') :
+                '<span style="color:var(--muted);font-size:13px;">None known</span>';
+
+            // Medical history
+            var hist = p.medical_history || [];
+            var histEl = document.getElementById('hist-list');
+            if (!hist.length) {
+                histEl.innerHTML = '<div style="color:var(--muted);font-size:13px;">No history recorded.</div>';
+            } else {
+                histEl.innerHTML = hist.map(function(h) {
+                    var sc = 'st-' + (h.status || 'monitored').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '');
+                    return '<div class="hist-row">' +
+                        '<div class="hist-top"><span class="hist-cond">' + h.condition + '</span>' +
+                        '<span class="hist-status ' + sc + '">' + h.status + '</span></div>' +
+                        '<div class="hist-since">Since ' + h.diagnosed + '</div>' +
+                        '<div class="hist-notes">' + h.notes + '</div></div>';
+                }).join('');
+            }
+
+            // Update patient preview conditions
+            var conds = p.chronic_conditions || [];
+            document.getElementById('pp-conditions').innerHTML = conds.length ?
+                conds.map(function(c) {
+                    return '<span class="pp-tag">' + c + '</span>';
+                }).join('') :
+                '<span style="color:var(--muted);font-size:12px;">None</span>';
+
+            // Policy tab
+            document.getElementById('pol-company').textContent = p.insurance_company || '—';
+            document.getElementById('pol-number').textContent = 'Policy: ' + p.policy_number;
+            document.getElementById('pol-holder').textContent = p.policy_holder || '';
+            document.getElementById('pol-dates').textContent = p.policy_effective || '';
+            document.getElementById('pol-network').textContent = p.network || '—';
+
+            var polLabels = {
+                annual_limit: 'Annual Limit',
+                accommodation: 'Accommodation',
+                coverage: 'Coverage Type',
+                outpatient_deductible: 'Outpatient Deductible',
+                network: 'Network'
+            };
+            var polData = {
+                annual_limit: 'SR ' + (p.limits || 0).toLocaleString(),
+                accommodation: p.accommodation,
+                coverage: p.coverage,
+                outpatient_deductible: p.outpatient_deductible,
+                network: p.network
+            };
+
+            // Also show all covered services in policy tab
+            var svcRows = '';
+            if (covSvcs) {
+                Object.keys(covSvcs).forEach(function(k) {
+                    var v = covSvcs[k];
+                    var vc = v.covered ? 'v-covered' : 'v-no';
+                    var vt = v.covered ? v.limit : 'Not Covered';
+                    svcRows += '<div class="pol-item"><div class="pol-key">' + k + (v.notes ? '<br><span style="font-size:10px;color:var(--muted2);">' + v.notes + '</span>' : '') + '</div>' +
+                        '<div class="pol-val ' + vc + '">' + vt + '</div></div>';
+                });
+            }
+
+            var headerRows = Object.keys(polData).map(function(k) {
+                return '<div class="pol-item"><div class="pol-key">' + polLabels[k] + '</div><div class="pol-val v-limit">' + polData[k] + '</div></div>';
+            }).join('');
+
+            document.getElementById('pol-grid').innerHTML = headerRows + svcRows;
+
+            // Pre-auth tab
+            var paReq = p.pre_auth_required;
+            var paLim = p.pre_auth_limit;
+            var bw = document.getElementById('pa-badge-wrap');
+            bw.innerHTML = '<div class="pa-badge ' + (paReq ? 'pa-yes' : 'pa-no') + '">' +
+                (paReq ? '⚠ Pre-Authorization Required' : '✓ No Pre-Authorization Required') +
+                (paLim ? ' — Threshold: SR ' + paLim.toLocaleString() : '') + '</div>';
+            document.getElementById('pa-notes').textContent = p.pre_auth_notes || '—';
+            document.getElementById('pa-special').textContent = p.special_instructions || '—';
+
+            // Show panel
+            document.getElementById('results-panel').classList.remove('hidden');
+            switchTab('profile');
+
+            // Limit tracking
+            var totalLimit = p.limits || 50000;
+            var limitKey = 'rvl_' + pid;
+            if (!localStorage.getItem(limitKey)) {
+                localStorage.setItem(limitKey, JSON.stringify({
+                    total: totalLimit,
+                    remaining: totalLimit,
+                    used: 0
+                }));
+            }
+
+            if (price > 0 && (st === 'Approved')) {
+                var state = deductLimit(pid, price);
+                saveClaim(pid, service, price, st);
+                renderLimitCard(pid, state);
+                if (state.remaining < totalLimit * 0.1) {
+                    showToast('⚠ Low Limit', 'Only SR ' + state.remaining.toLocaleString() + ' remaining for ' + pid + '.');
+                } else {
+                    showToast('Claim Recorded', 'SR ' + price.toLocaleString() + ' deducted. SR ' + state.remaining.toLocaleString() + ' remaining.');
+                }
+            } else {
+                var st2 = getLimitState(pid, totalLimit);
+                if (price > 0 && st2) saveClaim(pid, service, price, st + ' (not deducted)');
+                renderLimitCard(pid, getLimitState(pid, totalLimit));
+            }
+        }
+
+        // ─── TABS ─────────────────────────────────────
+        function switchTab(name) {
+            var names = ['profile', 'policy', 'preauth'];
+            document.querySelectorAll('.tab-btn').forEach(function(b, i) {
+                b.classList.toggle('active', names[i] === name);
+            });
+            document.querySelectorAll('.tab-pane').forEach(function(p) {
+                p.classList.remove('active');
+            });
+            var pane = document.getElementById('pane-' + name);
+            if (pane) pane.classList.add('active');
+        }
+
+        // ─── LIMIT STORAGE ────────────────────────────
+        function getLimitState(pid, total) {
+            try {
+                var raw = localStorage.getItem('rvl_' + pid);
+                if (raw) return JSON.parse(raw);
+                if (total !== null) return {
+                    total: total,
+                    remaining: total,
+                    used: 0
+                };
+            } catch (e) {}
+            return null;
+        }
+
+        function deductLimit(pid, amount) {
+            var key = 'rvl_' + pid;
+            var state = getLimitState(pid, 0);
+            if (!state) return null;
+            state.remaining = Math.max(0, state.remaining - amount);
+            state.used = state.total - state.remaining;
+            localStorage.setItem(key, JSON.stringify(state));
+            return state;
+        }
+
+        function saveClaim(pid, service, amount, status) {
+            var key = 'rvc_' + pid;
+            var claims = [];
+            try {
+                claims = JSON.parse(localStorage.getItem(key) || '[]');
+            } catch (e) {}
+            claims.unshift({
+                service: service,
+                amount: amount,
+                status: status,
+                date: new Date().toLocaleDateString('en-GB')
+            });
+            localStorage.setItem(key, JSON.stringify(claims.slice(0, 15)));
+        }
+
+        function renderLimitCard(pid, state) {
+            if (!state) return;
+            document.getElementById('limit-card').classList.remove('hidden');
+            document.getElementById('lb-pid').textContent = pid;
+            var pct = state.total > 0 ? (state.remaining / state.total) * 100 : 0;
+            document.getElementById('lb-remaining').textContent = 'SR ' + Math.round(state.remaining).toLocaleString();
+            document.getElementById('lb-total').textContent = 'of SR ' + Math.round(state.total).toLocaleString();
+            document.getElementById('lb-used').textContent = 'SR ' + Math.round(state.used).toLocaleString() + ' used';
+            document.getElementById('lb-pct').textContent = Math.round(pct) + '% remaining';
+            var bar = document.getElementById('bar-fill');
+            bar.style.width = pct + '%';
+            bar.className = 'bar-fill' + (pct < 15 ? ' danger' : pct < 40 ? ' warn' : '');
+
+            var claims = [];
+            try {
+                claims = JSON.parse(localStorage.getItem('rvc_' + pid) || '[]');
+            } catch (e) {}
+            var cl = document.getElementById('claims-list');
+            if (!claims.length) {
+                cl.innerHTML = '<div class="no-claims">No claims recorded yet.</div>';
+            } else {
+                cl.innerHTML = claims.map(function(c) {
+                    return '<div class="claim-row"><div class="cr-left"><div class="cs">' + c.service + '</div>' +
+                        '<div class="cm">' + c.date + ' · ' + c.status + '</div></div>' +
+                        '<div class="cr-amt">SR ' + (c.amount || 0).toLocaleString() + '</div></div>';
+                }).join('');
+            }
+        }
+
+        function resetLimit() {
+            if (!currentPid) return;
+            localStorage.removeItem('rvl_' + currentPid);
+            localStorage.removeItem('rvc_' + currentPid);
+            document.getElementById('limit-card').classList.add('hidden');
+            showToast('Limit Reset', currentPid + ' annual limit cleared.');
+        }
+
+        // ─── HELPERS ──────────────────────────────────
+        function showErr(msg) {
+            var b = document.getElementById('err-box');
+            b.textContent = msg;
+            b.style.display = 'block';
+        }
+
+        var toastTimer;
+
+        function showToast(title, msg) {
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-msg').textContent = msg;
+            var t = document.getElementById('toast');
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() {
+                t.classList.remove('show');
+            }, 4500);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') submitRequest();
+        });
+    </script>
+</body>
+
+</html>
