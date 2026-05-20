@@ -1039,9 +1039,9 @@
                 </div>
 
                 <div class="field">
-                    <label>Service Price (SR)</label>
+                    <label>Service Price (EGP)</label>
                     <div class="price-wrap">
-                        <span class="price-pre">SR</span>
+                        <span class="price-pre">EGP</span>
                         <input type="number" id="inp-price" placeholder="0.00" min="0" step="0.01">
                     </div>
                 </div>
@@ -1072,7 +1072,7 @@
                         <div class="bar-fill" id="bar-fill" style="width:100%"></div>
                     </div>
                     <div class="bar-meta">
-                        <span id="lb-used">SR 0 used</span>
+                        <span id="lb-used">EGP 0 used</span>
                         <span id="lb-pct">100% remaining</span>
                     </div>
                 </div>
@@ -1207,7 +1207,7 @@
         });
 
         function loadPatients() {
-            fetch('/api/patients').then(function(r) {
+            fetch('api/patients').then(function(r) {
                 return r.json();
             }).then(function(list) {
                 allPatients = list;
@@ -1225,7 +1225,7 @@
         }
 
         function loadServices() {
-            fetch('/api/services').then(function(r) {
+            fetch('api/services').then(function(r) {
                 return r.json();
             }).then(function(list) {
                 allServices = list;
@@ -1299,7 +1299,7 @@
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner"></div> Analyzing...';
 
-            fetch('/api/approve', {
+            fetch('api/approve', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1370,7 +1370,7 @@
             document.getElementById('r-dob').textContent = p.dob;
             document.getElementById('r-gender').textContent = p.gender;
             document.getElementById('r-class').textContent = p.class;
-            document.getElementById('r-limits').textContent = 'SR ' + (p.limits || 0).toLocaleString();
+            document.getElementById('r-limits').textContent = 'EGP ' + (p.limits || 0).toLocaleString();
             document.getElementById('r-coverage').textContent = p.coverage;
 
             var allergies = p.allergies || [];
@@ -1419,7 +1419,7 @@
                 network: 'Network'
             };
             var polData = {
-                annual_limit: 'SR ' + (p.limits || 0).toLocaleString(),
+                annual_limit: 'EGP ' + (p.limits || 0).toLocaleString(),
                 accommodation: p.accommodation,
                 coverage: p.coverage,
                 outpatient_deductible: p.outpatient_deductible,
@@ -1450,7 +1450,7 @@
             var bw = document.getElementById('pa-badge-wrap');
             bw.innerHTML = '<div class="pa-badge ' + (paReq ? 'pa-yes' : 'pa-no') + '">' +
                 (paReq ? '⚠ Pre-Authorization Required' : '✓ No Pre-Authorization Required') +
-                (paLim ? ' — Threshold: SR ' + paLim.toLocaleString() : '') + '</div>';
+                (paLim ? ' — Threshold: EGP ' + paLim.toLocaleString() : '') + '</div>';
             document.getElementById('pa-notes').textContent = p.pre_auth_notes || '—';
             document.getElementById('pa-special').textContent = p.special_instructions || '—';
 
@@ -1474,9 +1474,9 @@
                 saveClaim(pid, service, price, st);
                 renderLimitCard(pid, state);
                 if (state.remaining < totalLimit * 0.1) {
-                    showToast('⚠ Low Limit', 'Only SR ' + state.remaining.toLocaleString() + ' remaining for ' + pid + '.');
+                    showToast('⚠ Low Limit', 'Only EGP ' + state.remaining.toLocaleString() + ' remaining for ' + pid + '.');
                 } else {
-                    showToast('Claim Recorded', 'SR ' + price.toLocaleString() + ' deducted. SR ' + state.remaining.toLocaleString() + ' remaining.');
+                    showToast('Claim Recorded', 'EGP ' + price.toLocaleString() + ' deducted. EGP ' + state.remaining.toLocaleString() + ' remaining.');
                 }
             } else {
                 var st2 = getLimitState(pid, totalLimit);
@@ -1542,9 +1542,9 @@
             document.getElementById('limit-card').classList.remove('hidden');
             document.getElementById('lb-pid').textContent = pid;
             var pct = state.total > 0 ? (state.remaining / state.total) * 100 : 0;
-            document.getElementById('lb-remaining').textContent = 'SR ' + Math.round(state.remaining).toLocaleString();
-            document.getElementById('lb-total').textContent = 'of SR ' + Math.round(state.total).toLocaleString();
-            document.getElementById('lb-used').textContent = 'SR ' + Math.round(state.used).toLocaleString() + ' used';
+            document.getElementById('lb-remaining').textContent = 'EGP ' + Math.round(state.remaining).toLocaleString();
+            document.getElementById('lb-total').textContent = 'of EGP ' + Math.round(state.total).toLocaleString();
+            document.getElementById('lb-used').textContent = 'EGP ' + Math.round(state.used).toLocaleString() + ' used';
             document.getElementById('lb-pct').textContent = Math.round(pct) + '% remaining';
             var bar = document.getElementById('bar-fill');
             bar.style.width = pct + '%';
@@ -1561,7 +1561,7 @@
                 cl.innerHTML = claims.map(function(c) {
                     return '<div class="claim-row"><div class="cr-left"><div class="cs">' + c.service + '</div>' +
                         '<div class="cm">' + c.date + ' · ' + c.status + '</div></div>' +
-                        '<div class="cr-amt">SR ' + (c.amount || 0).toLocaleString() + '</div></div>';
+                        '<div class="cr-amt">EGP ' + (c.amount || 0).toLocaleString() + '</div></div>';
                 }).join('');
             }
         }

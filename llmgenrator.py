@@ -84,7 +84,7 @@ def generate_approval_decision(patient_info, requested_service, service_price=0)
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.5-flash-lite",
             contents=prompt,
             config={"response_mime_type": "application/json"}
         )
